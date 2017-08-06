@@ -5,7 +5,7 @@
 
     <groupId>cn.wazitang.gateway</groupId>
     <artifactId>zuul-gateway</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>zuul-gateway</name>
@@ -19,6 +19,8 @@
     </parent>
 
     <properties>
+        <docker.image.name>zuul.gateway</docker.image.name>
+        <docker.image.version>0.0.1</docker.image.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -82,6 +84,22 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>${docker.image.name}:${docker.image.version}</imageName>
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <skipDockerBuild>false</skipDockerBuild>
+                    <resources>
+                        <resource>
+                            <directory>${project.build.directory}</directory><!--${project.basedir}/target-->
+                            <include>${project.build.finalName}.jar</include><!--${project.artifactId}-${project.version}-->
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
         </plugins>
     </build>
