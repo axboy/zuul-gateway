@@ -15,7 +15,7 @@ public class ZuulGatewayApplication {
         SpringApplication.run(ZuulGatewayApplication.class, args);
     }
 
-    @RequestMapping(value = {"/", "/index"})
+    @RequestMapping(value = {"/"})
     public String index() {
         return "gateway: success";
     }

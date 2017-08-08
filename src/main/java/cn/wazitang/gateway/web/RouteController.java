@@ -29,30 +29,31 @@ public class RouteController {
     private CustomRouteRepo customRouteRepo;
 
     @RequestMapping(value = "refresh", method = RequestMethod.GET)
-    public String refresh() {
+    public UnifyResp<String> refresh() {
         this.realRefresh();
-        return "success";
+        return new UnifyResp<>(200, "SUCCESS");
     }
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public String save(@RequestBody SaveRouteReq req) {
+    public UnifyResp<String> save(@RequestBody RouteSaveReq req) {
         CustomRoute route = new CustomRoute();
         if (req.getId() != null) {
             route = customRouteRepo.findOne(req.getId());
         }
         route.setApiName(req.getApiName());
-        route.setRouteId(req.getRouteId());
         route.setPath(req.getPath());
-        route.setUrl(req.getUrl());
+        route.setLocation(req.getUrl());
+        route.setStripPrefix(req.getStripPrefix());
         customRouteRepo.save(route);
         this.realRefresh();
-        return "success";
+        return new UnifyResp<>(200, "SUCCESS");
     }
 
     @RequestMapping(value = "page", method = RequestMethod.GET)
-    public Page<CustomRoute> page(Integer page, Integer size) {
-        return customRouteRepo.findAll(new PageRequest(page != null ? page : 0, size != null ? size : 20,
+    public UnifyResp<Page<CustomRoute>> page(Integer page, Integer size) {
+        Page<CustomRoute> resp = customRouteRepo.findAll(new PageRequest(page != null ? page : 0, size != null ? size : 20,
                 new Sort(new Sort.Order(Sort.Direction.DESC, "routeId"))));
+        return new UnifyResp<>(200, resp);
     }
 
     private void realRefresh() {
