@@ -23,7 +23,7 @@ public class CustomRoute {
     private String apiName;
 
     /**
-     * 是否可用
+     * 是否可用，未使用
      */
     private Boolean enabled;
 

@@ -44,6 +44,9 @@ public class RouteController {
         route.setPath(req.getPath());
         route.setLocation(req.getUrl());
         route.setStripPrefix(req.getStripPrefix());
+        route.setMemo(req.getMemo());
+        route.setEnabled(true);
+        route.setRetryAble(false);
         customRouteRepo.save(route);
         this.realRefresh();
         return new UnifyResp<>(200, "SUCCESS");
@@ -52,8 +55,14 @@ public class RouteController {
     @RequestMapping(value = "page", method = RequestMethod.GET)
     public UnifyResp<Page<CustomRoute>> page(Integer page, Integer size) {
         Page<CustomRoute> resp = customRouteRepo.findAll(new PageRequest(page != null ? page : 0, size != null ? size : 20,
-                new Sort(new Sort.Order(Sort.Direction.DESC, "routeId"))));
+                new Sort(new Sort.Order(Sort.Direction.DESC, "id"))));
         return new UnifyResp<>(200, resp);
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    public UnifyResp<String> delete(Long id) {
+        customRouteRepo.delete(id);
+        return new UnifyResp<>(200, "SUCCESS");
     }
 
     private void realRefresh() {

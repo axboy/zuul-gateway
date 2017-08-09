@@ -56,6 +56,7 @@ public class MyRouteLocator extends SimpleRouteLocator implements RefreshableRou
             zuulRoute.setStripPrefix(res.isStripPrefix());
             zuulRoute.setRetryable(res.getRetryAble());
             routes.put(zuulRoute.getPath(), zuulRoute);
+            System.out.println("route:" + zuulRoute.getPath() + "==>" + zuulRoute.getUrl());
         });
         return routes;
     }
