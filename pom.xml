@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <docker.image.name>zuul.gateway</docker.image.name>
+        <docker.image.name>local/zuul-gateway</docker.image.name>
         <docker.image.version>0.0.1</docker.image.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
