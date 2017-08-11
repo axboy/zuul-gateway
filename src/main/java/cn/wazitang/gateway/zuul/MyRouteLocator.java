@@ -8,8 +8,7 @@ import org.springframework.cloud.netflix.zuul.filters.SimpleRouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties.ZuulRoute;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MyRouteLocator extends SimpleRouteLocator implements RefreshableRouteLocator {
 
@@ -55,6 +54,10 @@ public class MyRouteLocator extends SimpleRouteLocator implements RefreshableRou
             zuulRoute.setUrl(res.getUrl());
             zuulRoute.setStripPrefix(res.isStripPrefix());
             zuulRoute.setRetryable(res.getRetryAble());
+            zuulRoute.setCustomSensitiveHeaders(true);
+//            Set<String> headers = new LinkedHashSet<>(
+//                    Arrays.asList("Cookie", "Set-Cookie", "Server"));
+            //zuulRoute.setSensitiveHeaders(headers);
             routes.put(zuulRoute.getPath(), zuulRoute);
             System.out.println("route:" + zuulRoute.getPath() + " ==> " + zuulRoute.getUrl());
         });
