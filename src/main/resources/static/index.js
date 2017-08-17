@@ -237,7 +237,21 @@ let refresh = () => {
     });
 };
 
+let stompClient = null;
+
+let connect = () => {
+    let socket = new SockJS("/routeEndpoint");
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        stompClient.subscribe('/route/log', (resp)=> {
+            console.log(resp);
+        });
+    });
+};
+
+
 $(function () {
+    connect();
     getData(0, 20).then(data => {
         loadData(data.data.content);
     });
