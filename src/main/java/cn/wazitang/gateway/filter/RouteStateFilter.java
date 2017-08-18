@@ -1,47 +1,68 @@
 package cn.wazitang.gateway.filter;
 
 import com.netflix.zuul.ZuulFilter;
-import org.springframework.messaging.handler.annotation.SendTo;
+import com.netflix.zuul.context.RequestContext;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 作者 zcw
  * 时间 2017/8/16 23:14
- * 描述 TODO
+ * 描述 路由过滤器
  */
 @Component
 public class RouteStateFilter extends ZuulFilter {
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @Override
     public String filterType() {
-        System.out.println(">>>filterType");
-        return "pre";
+        return "post";
     }
 
     @Override
     public int filterOrder() {
-        System.out.println(">>>filterOrder");
         return 50;
     }
 
 
     @Override
     public boolean shouldFilter() {
-        System.out.println(">>>shouldFilter");
         return true;
     }
 
-
     @Override
     public Object run() {
-        System.out.println("run");
-        return routeLog("str" + new Random().nextInt());
+        messagingTemplate.convertAndSend("/route/log", getRouteLog());
+        return null;
     }
 
+    private RouteLog getRouteLog() {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        final HttpServletRequest request = ctx.getRequest();
+        RouteLog log = new RouteLog();
+        log.setRequestUrl(request.getRequestURL().toString());
+        log.setMethod(request.getMethod());
+        log.setParams(request.getParameterMap());
+        log.setServerAddr(request.getLocalAddr());
+        log.setServerPort(request.getServerPort());
+        log.setRequestURI(request.getRequestURI());
+        return log;
+    }
 
-    @SendTo("/route/log")
-    public String routeLog(String str) {
-        return str;
+    @Data
+    private static class RouteLog {
+        private String requestUrl;
+        private String method;
+        private Map<String, String[]> params;
+        private String serverAddr;
+        private int serverPort;
+        private String requestURI;
     }
 }

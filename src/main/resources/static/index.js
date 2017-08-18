@@ -238,17 +238,15 @@ let refresh = () => {
 };
 
 let stompClient = null;
-
 let connect = () => {
     let socket = new SockJS("/routeEndpoint");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, (frame) => {
-        stompClient.subscribe('/route/log', (resp)=> {
-            console.log(resp);
+        stompClient.subscribe('/route/log', (resp) => {
+            console.log(`resp >>>>>>>>>>>>>>\n${resp.body}`);
         });
     });
 };
-
 
 $(function () {
     connect();
