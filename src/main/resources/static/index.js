@@ -246,10 +246,21 @@ let connect = () => {
             console.log(`resp >>>>>>>>>>>>>>\n${resp.body}`);
         });
     });
+    // socket.onmessage = (event) => {
+    //     console.log(event);
+    // };
+};
+
+let test = () => {
+    let ws = new WebSocket(`ws://${document.location.href.split("/")[2]}/routes/speed`);
+    ws.onmessage = (event) => {
+        console.log(`event >>>>>>\n${event.data}`);
+    }
 };
 
 $(function () {
     connect();
+    test();
     getData(0, 20).then(data => {
         loadData(data.data.content);
     });
