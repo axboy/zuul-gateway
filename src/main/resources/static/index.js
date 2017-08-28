@@ -259,8 +259,8 @@ let test = () => {
 };
 
 $(function () {
-    connect();
-    test();
+    //connect();
+    //test();
     getData(0, 20).then(data => {
         loadData(data.data.content);
     });
