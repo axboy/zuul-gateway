@@ -1,4 +1,4 @@
-package cn.wazitang.gateway.web;
+package cn.axboy.gateway.web;
 
 import lombok.Data;
 

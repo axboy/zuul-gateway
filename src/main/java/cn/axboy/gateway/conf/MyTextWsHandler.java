@@ -1,4 +1,4 @@
-package cn.wazitang.gateway.conf;
+package cn.axboy.gateway.conf;
 
 import com.google.gson.Gson;
 import org.springframework.stereotype.Component;

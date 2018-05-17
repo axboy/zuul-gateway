@@ -1,4 +1,4 @@
-package cn.wazitang.gateway.conf;
+package cn.axboy.gateway.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

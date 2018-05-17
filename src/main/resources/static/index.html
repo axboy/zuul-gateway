@@ -2,30 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zuul GateWay</title>
-    <!--<link rel="stylesheet" type="text/css" href="lib/easyui.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="lib/icon.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="lib/demo.css">-->
-    <!--<script type="text/javascript" src="lib/jquery.min.js"></script>-->
-    <!--<script type="text/javascript" src="lib/jquery.easyui.min.js"></script>-->
-
-    <link rel="stylesheet" type="text/css" href="//www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="//www.jeasyui.net/Public/js/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="//www.jeasyui.net/Public/js/easyui/demo/demo.css">
-    <script src="//code.jquery.com/jquery-1.6.1.min.js"></script>
-    <script src="//www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
-    <script src="lib/sockjs.min.js"></script>
-    <script src="lib/stomp.min.js"></script>
-    <script src="index.js"></script>
+    <title>Api 动态路由</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-<h2>动态路由</h2>
+<div id="vue-app" class="container-fluid">
+    <h2 class="text-center">Api动态路由</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>ApiName</th>
+            <th>Path</th>
+            <th>Target</th>
+            <th>StripPrefix</th>
+            <th>Enabled</th>
+            <th>Memo</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(data,index) in resp.content">
+            <th>{{pageData.curPage * pageData.pageSize + index + 1}}</th>
+            <th>{{data.apiName}}</th>
+            <th>{{data.path}}</th>
+            <th>{{data.url}}</th>
+            <th>{{data.stripPrefix}}</th>
+            <th>{{data.enabled}}</th>
+            <th>{{data.memo}}</th>
+            <th>
+                <button type="button" class="btn btn-primary"
+                        v-on:click="showModal(index)">编辑
+                </button>
+                <button type="button" class="btn btn-danger"
+                        v-on:click="remove(data.id)">删除
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
 
-<div style="margin:10px 0">
-    <a href="#" class="easyui-linkbutton" onclick="insert()">添加路由</a>
-    <a href="#" class="easyui-linkbutton" onclick="refresh()">刷新</a>
+    <div class="clearfix">
+        <button type="button" class="btn btn-primary"
+                v-on:click="showModal(-1)">添加路由
+        </button>
+        <button type="button" class="btn btn-primary"
+                v-on:click="refresh()">刷新
+        </button>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" v-if="modalData.id!=null">
+                        编辑
+                    </h4>
+                    <h4 class="modal-title" id="myModalLabel" v-if="modalData.id==null">
+                        新增
+                    </h4>
+                </div>
+                <div role="form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="ApiName">ApiName</label>
+                            <input type="text" class="form-control" id="apiName" placeholder="名字，随便填"
+                                   v-model="modalData.apiName">
+                        </div>
+                        <div class="form-group">
+                            <label for="Path">Path</label>
+                            <input type="text" class="form-control" id="path" placeholder="类似/api/**"
+                                   v-model="modalData.path">
+                        </div>
+                        <div class="form-group">
+                            <label for="target">Target</label>
+                            <input type="text" class="form-control" id="target" placeholder="http://...."
+                                   v-model="modalData.url">
+                        </div>
+                        <div class="form-group">
+                            <label for="stripPrefix">StripPrefix</label>
+                            <input type="text" class="form-control" id="stripPrefix" placeholder="true / false"
+                                   v-model="modalData.stripPrefix">
+                        </div>
+                        <div class="form-group">
+                            <label for="enabled">Enabled</label>
+                            <input type="text" class="form-control" id="enabled" placeholder="true / false"
+                                   v-model="modalData.enabled">
+                        </div>
+                        <div class="form-group">
+                            <label for="memo">Memo</label>
+                            <input type="text" class="form-control" id="memo" placeholder="备注，随便填"
+                                   v-model="modalData.memo">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                v-on:click="submit()">保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<table id="tt" class="easyui-datagrid" style="width:auto;"></table>
 </body>
+<script src="index.js"></script>
 </html>

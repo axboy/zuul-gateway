@@ -11,6 +11,11 @@ spring:
     password: 123456
     driverClassName: com.mysql.jdbc.Driver
 
+    http:
+      multipart:
+        max-file-size: 2Mb
+        max-request-size: 10Mb
+
   # Specify the DBMS
   jpa:
     database: MYSQL

@@ -1,6 +1,6 @@
-package cn.wazitang.gateway.filter;
+package cn.axboy.gateway.filter;
 
-import cn.wazitang.gateway.conf.MyTextWsHandler;
+import cn.axboy.gateway.conf.MyTextWsHandler;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.Data;
@@ -9,9 +9,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Map;
 
 /**

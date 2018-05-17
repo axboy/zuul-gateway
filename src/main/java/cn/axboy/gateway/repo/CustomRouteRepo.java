@@ -1,6 +1,6 @@
-package cn.wazitang.gateway.repo;
+package cn.axboy.gateway.repo;
 
-import cn.wazitang.gateway.domain.CustomRoute;
+import cn.axboy.gateway.domain.CustomRoute;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 

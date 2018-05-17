@@ -1,6 +1,6 @@
-package cn.wazitang.gateway.zuul;
+package cn.axboy.gateway.zuul;
 
-import cn.wazitang.gateway.repo.CustomRouteRepo;
+import cn.axboy.gateway.repo.CustomRouteRepo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.RefreshableRouteLocator;

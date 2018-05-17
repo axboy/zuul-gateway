@@ -1,9 +1,8 @@
-# maven docker build will use this file.
 FROM openjdk:8-jre-alpine
 RUN mkdir /app
 WORKDIR /app
 VOLUME /tmp
-ADD *.jar /app/app.jar
+ADD target/*.jar /app/app.jar
 
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8  -Djava.security.egd=file:/dev/./urandom"
 ENV LOG_OPTS="-Dlogging.path=/app/log/   -Dlogback.loglevel=ERROR"

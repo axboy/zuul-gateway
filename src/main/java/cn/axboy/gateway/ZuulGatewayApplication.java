@@ -1,4 +1,4 @@
-package cn.wazitang.gateway;
+package cn.axboy.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

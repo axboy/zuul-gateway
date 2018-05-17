@@ -1,6 +1,6 @@
-package cn.wazitang.gateway.conf;
+package cn.axboy.gateway.conf;
 
-import cn.wazitang.gateway.zuul.MyRouteLocator;
+import cn.axboy.gateway.zuul.MyRouteLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
