@@ -20,7 +20,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer im
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/routeEndpoint")
+        registry.addEndpoint("/stompEndpoint")
                 .setAllowedOrigins("*")
                 .withSockJS();
     }
@@ -33,6 +33,6 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer im
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(myTextWsHandler, "routes/speed").setAllowedOrigins("*");
+        registry.addHandler(myTextWsHandler, "socket/route/logs").setAllowedOrigins("*");
     }
 }

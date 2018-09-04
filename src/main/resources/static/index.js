@@ -2,6 +2,7 @@ let vue = new Vue({
     el: "#vue-app",
     data: {
         resp: {},
+        logs: [],
         modalData: {},
         pageData: {
             curPage: 0,
@@ -31,7 +32,7 @@ let vue = new Vue({
         showModal(index) {
             vue.modalData = {};
             if (index >= 0) {
-                vue.modalData = vue.resp.content[index];
+                Object.assign(vue.modalData, vue.resp.content[index]);
             }
             $('#myModal').modal({
                 keyboard: true
@@ -46,6 +47,11 @@ let vue = new Vue({
                 }
             });
         },
+        showLog(){
+            $('#logModal').modal({
+                keyboard: true
+            })
+        },
         //提交
         submit() {
             $.ajax({
@@ -55,7 +61,7 @@ let vue = new Vue({
                 contentType: "application/json",
                 dataType: 'json',
                 success: () => {
-                    vue.getData(0, 100);
+                    //vue.getData(0, 100);
                     $('#myModal').modal('hide')
                 }
             });
@@ -74,4 +80,39 @@ let vue = new Vue({
         }
     }
 });
+
+let useWs = () => {
+    let ws = new WebSocket(`ws://${document.location.href.split("/")[2]}/socket/route/logs`);
+    ws.onmessage = (event) => {
+        let data = JSON.parse(event.data);
+        vue.logs.push(data);
+    };
+};
+
+let useStomp = () => {
+    let stompClient = null;
+    let socket = new SockJS('/stompEndpoint');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        stompClient.subscribe('/route/dataChange', (resp) => {
+            //console.log(`subscribe resp >>>>>>>>>>>>>>\n${resp.body}`)
+            //vue.getData(0, 100);
+            let dataStr = resp.body;
+            let data = JSON.parse(dataStr);
+
+            for (let i = 0; i < vue.resp.content.length; i++) {
+                let tmp = vue.resp.content[i];
+                if (tmp.id === data.id) {
+                    Object.assign(vue.resp.content[i], data);
+                    //vue.resp.content[i] = data;
+                    return;
+                }
+            }
+            vue.resp.content.push(data);
+        });
+    });
+};
+
 vue.getData(0, 100);
+useStomp();
+useWs();

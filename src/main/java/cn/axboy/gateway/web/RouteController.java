@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,9 @@ public class RouteController {
 
     @Autowired
     private CustomRouteRepo customRouteRepo;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @RequestMapping(value = "refresh", method = RequestMethod.GET)
     public UnifyResp<String> refresh() {
@@ -48,6 +52,9 @@ public class RouteController {
         route.setEnabled(true);
         route.setRetryAble(false);
         customRouteRepo.save(route);
+
+        //FIXME @SendTo 不可用
+        messagingTemplate.convertAndSend("/route/dataChange", route);
         this.realRefresh();
         return new UnifyResp<>(200, "SUCCESS");
     }

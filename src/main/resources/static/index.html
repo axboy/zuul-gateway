@@ -6,6 +6,13 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--拖拽依赖-->
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.15.0/vuedraggable.min.js"></script>
+
+    <script src="lib/sockjs.min.js"></script>
+    <script src="lib/stomp.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
@@ -35,10 +42,10 @@
             <th>{{data.memo}}</th>
             <th>
                 <button type="button" class="btn btn-primary"
-                        v-on:click="showModal(index)">编辑
+                        @click="showModal(index)">编辑
                 </button>
                 <button type="button" class="btn btn-danger"
-                        v-on:click="remove(data.id)">删除
+                        @click="remove(data.id)">删除
                 </button>
             </th>
         </tr>
@@ -47,10 +54,13 @@
 
     <div class="clearfix">
         <button type="button" class="btn btn-primary"
-                v-on:click="showModal(-1)">添加路由
+                @click="showModal(-1)">添加路由
         </button>
         <button type="button" class="btn btn-primary"
-                v-on:click="refresh()">刷新
+                @click="refresh()">刷新
+        </button>
+        <button type="button" class="btn btn-primary"
+                @click="showLog()">日志
         </button>
     </div>
 
@@ -70,7 +80,7 @@
                         新增
                     </h4>
                 </div>
-                <div role="form">
+                <form role="form" onsubmit="return false;">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="ApiName">ApiName</label>
@@ -108,10 +118,37 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" class="btn btn-primary"
-                                v-on:click="submit()">保存
+                        <button type="submit" class="btn btn-primary"
+                                @click="submit()">保存
                         </button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--弹窗-->
+    <div class="modal fade" id="logModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                    <h4 class="modal-title">
+                        日志
+                    </h4>
+                </div>
+                <div class="modal-body" style="height:500px; overflow: auto">
+                    <div v-for="(data,index) in logs">
+                        {{data.method}} {{data.requestUrl}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">关闭
+                    </button>
                 </div>
             </div>
         </div>
