@@ -3,18 +3,25 @@ server:
 
 ribbon.eureka.enabled: false     #是否从注册中心获取
 
+config.db:
+  host: 192.168.1.20
+  port: 3306
+  name: gateway
+  user: root
+  pass: 123456
+
 spring:
   # datasource
   datasource:
-    url: jdbc:mysql://192.168.0.1:3306/demo?characterEncoding=utf8&useSSL=true
-    username: demo_root
-    password: 123456
+    url: jdbc:mysql://${config.db.host}:${config.db.port}/${config.db.name}?characterEncoding=utf8&useSSL=true
+    username: ${config.db.user}
+    password: ${config.db.pass}
     driverClassName: com.mysql.jdbc.Driver
 
     http:
       multipart:
-        max-file-size: 2Mb
-        max-request-size: 10Mb
+        max-file-size: 10Mb
+        max-request-size: 50Mb
 
   # Specify the DBMS
   jpa:
